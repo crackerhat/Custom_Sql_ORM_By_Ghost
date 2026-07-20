@@ -1,5 +1,3 @@
-from ghostorm.core import column
-
 
 class InstrumentedAttribute:
     def __init__(self, column):

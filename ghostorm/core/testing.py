@@ -14,7 +14,8 @@ class User(Model):
 class Posts(Model):
     id = Column(Integer, primary_key=False)
 
-print(User.id)
+u = User()
+print(u._state)
 
 
 # users = Table("users")
