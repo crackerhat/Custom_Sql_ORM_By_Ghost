@@ -10,6 +10,8 @@ class InstrumentedAttribute:
         return instance.__dict__.get(self.key, None)
 
     def __set__(self, instance, value):
+        old_value = instance.__dict__.get(self.key)
+        instance._state.record_change(self.key, old_value, value)
         instance.__dict__[self.key] = value
 
 

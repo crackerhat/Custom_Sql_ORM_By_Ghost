@@ -1,4 +1,5 @@
 from ghostorm.core.column import Column
+from ghostorm.orm.instance_state import InstanceState
 from ghostorm.types import Integer, String
 from ghostorm.core.table import Table
 from ghostorm.core.metadata import metadata
@@ -15,7 +16,10 @@ class Posts(Model):
     id = Column(Integer, primary_key=False)
 
 u = User()
-print(u._state)
+u.id = 2
+u.id = 3
+print(u._state.history)
+print(u._state.dirty)
 
 
 # users = Table("users")
