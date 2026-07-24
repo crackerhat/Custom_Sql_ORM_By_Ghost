@@ -17,9 +17,15 @@ class Posts(Model):
 
 u = User()
 u.id = 2
-u.id = 3
-print(u._state.history)
 print(u._state.dirty)
+u.id = 3
+state = u._state.get_attribute_state("id")
+
+print(state.original)
+print(state.current)
+print(state.modified)
+print(u._state.dirty)
+
 
 
 # users = Table("users")

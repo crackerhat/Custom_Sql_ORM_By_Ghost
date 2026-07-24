@@ -1,8 +1,9 @@
+from ghostorm.orm.attribute_state import AttributeState
 class InstanceState:
     def __init__(self, instance):
         self.instance = instance
         self.dirty = False
-        self.history = {}
+        self.attributes = {}
         self.mapper = None
         self.session = None
         self.identity = None
@@ -12,6 +13,9 @@ class InstanceState:
     def mark_clean(self):
         self.dirty = False
 
-    def record_change(self, key, old, new):
-        self.history[key] = (old, new)
-        self.mark_dirty()
+
+
+    def get_attribute_state(self, key):
+        if key not in self.attributes:
+            self.attributes[key] = AttributeState()
+        return self.attributes[key]
