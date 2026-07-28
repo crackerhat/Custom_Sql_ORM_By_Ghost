@@ -13,8 +13,6 @@ class InstanceState:
     def mark_clean(self):
         self.dirty = False
 
-
-
     def get_attribute_state(self, key):
         if key not in self.attributes:
             self.attributes[key] = AttributeState()

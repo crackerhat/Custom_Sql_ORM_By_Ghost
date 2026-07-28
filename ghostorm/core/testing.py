@@ -7,6 +7,7 @@ from ghostorm.core.model import Model
 from ghostorm.core.registry import registry
 from ghostorm.core.relationship import  RelationshipProperty
 from ghostorm.core.mapper import Mapper
+from ghostorm.orm.session import session
 
 class User(Model):
     id = Column(Integer, primary_key=True)
@@ -17,14 +18,17 @@ class Posts(Model):
 
 u = User()
 u.id = 2
-print(u._state.dirty)
 u.id = 3
-state = u._state.get_attribute_state("id")
+print(u._state.session)
+session.add(u)
+print(session.new)
+u.id = 4
+print(session.dirty)
 
-print(state.original)
-print(state.current)
-print(state.modified)
-print(u._state.dirty)
+# print(state.original)
+# print(state.current)
+# print(state.modified)
+# print(u._state.dirty)
 
 
 

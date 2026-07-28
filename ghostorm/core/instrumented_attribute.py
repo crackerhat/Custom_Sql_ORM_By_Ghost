@@ -13,8 +13,12 @@ class InstrumentedAttribute:
         # old_value = instance.__dict__.get(self.key)
         attribute_state = instance._state.get_attribute_state(self.key)
         attribute_state.set_value(value)
+        instance.__dict__[self.key] = value
         if attribute_state.modified:
             instance._state.mark_dirty()
-        instance.__dict__[self.key] = value
+
+
+            if instance._state.session:
+                instance._state.session.mark_dirty(instance)
 
 
