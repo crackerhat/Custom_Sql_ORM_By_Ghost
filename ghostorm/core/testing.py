@@ -8,7 +8,7 @@ from ghostorm.core.registry import registry
 from ghostorm.core.relationship import  RelationshipProperty
 from ghostorm.core.mapper import Mapper
 from ghostorm.orm.session import session
-
+from ghostorm.orm.identity_map import IdentityMap
 class User(Model):
     id = Column(Integer, primary_key=True)
     username = Column(String, nullable=False)
@@ -16,14 +16,20 @@ class User(Model):
 class Posts(Model):
     id = Column(Integer, primary_key=False)
 
-u = User()
-u.id = 2
-u.id = 3
-print(u._state.session)
-session.add(u)
-print(session.new)
-u.id = 4
-print(session.dirty)
+identity_maps = IdentityMap()
+user = User()
+user.id = 2
+identity_maps.add(user)
+print(identity_maps.get(User, 2))
+print(type(identity_maps))
+# u = User()
+# u.id = 2
+# u.id = 3
+# print(u._state.session)
+# session.add(u)
+# print(session.new)
+# u.id = 4
+# print(session.dirty)
 
 # print(state.original)
 # print(state.current)
