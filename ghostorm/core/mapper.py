@@ -23,4 +23,9 @@ class Mapper:
                 descriptor = InstrumentedAttribute(obj)
                 setattr(self.class_, name, descriptor)
 
+    def load(self, row):
+        obj = self.class_()
+        for key, value in row.items():
+            setattr(obj, key, value)
 
+        return obj

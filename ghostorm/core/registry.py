@@ -3,6 +3,6 @@ class Registry:
         self.mappers = {}
     def register(self, mapper):
         self.mappers[mapper.class_.__name__] = mapper
-    def resolve(self, name):
+    def get_mapper(self, name):
        return self.mappers.get(name)
 registry = Registry()
