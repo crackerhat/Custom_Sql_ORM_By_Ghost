@@ -1,6 +1,7 @@
 from ghostorm.orm.identity_map import IdentityMap
 from ghostorm.engine.engine import Engine
 from ghostorm.core.registry import registry
+from ghostorm.orm.unit_of_work import UnitOfWork
 
 class Session:
     def __init__(self):
@@ -42,6 +43,10 @@ class Session:
         obj._state.session = self
 
         return obj
+
+    def commit(self):
+        uow = UnitOfWork(self)
+        uow.show_operations()
 
 
 session = Session()

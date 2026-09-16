@@ -18,13 +18,30 @@ class User(Model):
 class Posts(Model):
     id = Column(Integer, primary_key=False)
 
+
+
 user = session.get(User, 1)
-print(user._state.mapper)
-print(user._state.session)
-print(user._state.identity)
-print(user._state.dirty)
-user.id = 3
-print(user._state.dirty)
+
+user.username = "leul"
+
+session.commit()
+
+
+# user = session.get(User, 1)
+# user.username = "Newname"
+# print(user.username)
+# print(user._state.dirty)
+# print(session.dirty)
+
+
+
+# user = session.get(User, 1)
+# print(user._state.mapper)
+# print(user._state.session)
+# print(user._state.identity)
+# print(user._state.dirty)
+# user.id = 3
+# print(user._state.dirty)
 
 
 # new_user = session.get(User, 2)
