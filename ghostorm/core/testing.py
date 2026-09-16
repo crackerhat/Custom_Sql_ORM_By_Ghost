@@ -18,15 +18,40 @@ class User(Model):
 class Posts(Model):
     id = Column(Integer, primary_key=False)
 
-engine = Engine()
-row = engine.select_by_primary_key("user", 1)
+user = session.get(User, 1)
+print(user._state.mapper)
+print(user._state.session)
+print(user._state.identity)
+print(user._state.dirty)
+user.id = 3
+print(user._state.dirty)
 
-mapper = Mapper(User)
-user = mapper.load(row)
-print(user.id)
-print(user.username)
-print(user.age)
-print(user.__dict__)
+
+# new_user = session.get(User, 2)
+# new_user2 = session.get(User, 2)
+# print(new_user is new_user2)
+
+# new_user = session.get(User, 1)
+# print(new_user.id)
+# print(new_user.username)
+
+# new_user = User()
+# new_user.id = 2
+# session.add(new_user)
+# user_2 = session.get(User, 2)
+# user_2.id = 3
+# print(session.dirty)
+# print(session.new)
+
+# engine = Engine()
+# row = engine.select_by_primary_key("user", 1)
+#
+# mapper = Mapper(User)
+# user = mapper.load(row)
+# print(user.id)
+# print(user.username)
+# print(user.age)
+# print(user.__dict__)
 #
 # identity_maps = IdentityMap()
 # user = User()

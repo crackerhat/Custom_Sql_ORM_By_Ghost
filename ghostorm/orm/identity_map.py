@@ -12,3 +12,10 @@ class IdentityMap:
         key = (cls, primary_key)
         return self._objects[key]
 
+
+
+
+
+
+
+

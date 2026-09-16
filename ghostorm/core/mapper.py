@@ -28,4 +28,6 @@ class Mapper:
         for key, value in row.items():
             setattr(obj, key, value)
 
+        obj._state.mapper = self
+        obj._state.identity = (self.class_, row["id"])
         return obj

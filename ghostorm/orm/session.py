@@ -10,7 +10,6 @@ class Session:
         self.identity_map = IdentityMap()
         self.engine = Engine()
 
-
     def add(self, instance):
         if instance not in self.new:
             self.new.append(instance)
@@ -29,7 +28,7 @@ class Session:
         except KeyError:
             print("object is not in Identity Map")
 
-        mapper = registry.get_mapper(cls)
+        mapper = registry.get_mapper(cls.__name__)
 
         row = self.engine.select_by_primary_key(mapper.table_name, primary_key)
 
@@ -45,5 +44,6 @@ class Session:
         return obj
 
 
-
 session = Session()
+
+
