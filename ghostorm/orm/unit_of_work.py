@@ -30,9 +30,12 @@ class UnitOfWork:
         return operation
 
     def execute_updates(self):
-        for instance in self.collect_dirty():
+        for instance in self.collect_dirty().copy():
             operation = self.create_update_operation(instance)
-            self.session.engine.update(operation["table"], operation["primary_key"], operation["changes"])
+            success = self.session.engine.update(operation["table"], operation["primary_key"], operation["changes"])
+            if success:
+                instance._state.commit() # we should have to clear the object state because if we don't do this later when we try to change another attribute it will also include and send the previous values again to the database
+                self.session.dirty.remove(instance)
 
     def show_operations(self):
         print(self.collect_new())

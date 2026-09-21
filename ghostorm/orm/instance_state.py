@@ -18,7 +18,10 @@ class InstanceState:
             self.attributes[key] = AttributeState()
         return self.attributes[key]
 
+    def commit(self):
+        for attribute_state in self.attributes.values():
+            attribute_state.commit()
 
-    
+        self.dirty = False
 
 
