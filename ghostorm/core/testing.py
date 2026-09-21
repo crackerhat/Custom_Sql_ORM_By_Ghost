@@ -21,11 +21,13 @@ class Posts(Model):
 
 
 user = session.get(User, 1)
-
+print(f"before {user.username}")
 user.username = "leul"
 
 session.commit()
 
+print(f"after {user.username}")
+print(session.dirty)
 
 # user = session.get(User, 1)
 # user.username = "Newname"

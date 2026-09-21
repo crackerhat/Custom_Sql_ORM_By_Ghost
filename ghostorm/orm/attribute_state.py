@@ -14,3 +14,6 @@ class AttributeState:
         else:
             self.modified = False
         
+    def commit(self):
+        self.original = self.current
+        self.modified = False

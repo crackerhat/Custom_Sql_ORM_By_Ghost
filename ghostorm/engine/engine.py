@@ -30,4 +30,17 @@ class Engine:
 
         return None
 
+    def update(self, table_name, primary_key, changes):
+        print(f"updating table {table_name}")
+        rows = self.database.get(table_name, [])
+
+        for row in rows:
+            if row["id"] == primary_key:
+                for column, value in changes.items():
+                    row[column] = value
+
+                print("row updated sucessfully")
+                return True
+        print("row not found")
+        return False
 
