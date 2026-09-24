@@ -26,7 +26,7 @@ class Session:
 
     def get(self, cls, primary_key):
         try:
-            obj = self.identity_map.get(cls, primary_key)
+            obj = self.identity_map.get(cls, primary_key) # remember the use of this identity map
             return obj
         except KeyError:
             print("object is not in Identity Map")
