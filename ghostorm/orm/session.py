@@ -13,6 +13,8 @@ class Session:
 
     def add(self, instance):
         if instance not in self.new:
+            mapper = registry.get_mapper(type(instance).__name__)
+            instance._state.mapper = mapper
             self.new.append(instance)
             instance._state.session = self
             self.identity_map.add(instance)

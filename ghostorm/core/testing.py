@@ -19,15 +19,43 @@ class Posts(Model):
     id = Column(Integer, primary_key=False)
 
 
+user = User()
+user.id = 4
+user.username = "db-copper"
+user.age = 19
 
-user = session.get(User, 1)
-print(f"before {user.username}")
-user.username = "leul"
-
+session.add(user)
+print("before commit")
+print(session.new)
 session.commit()
+print("after commit")
+print(session.new)
 
-print(f"after {user.username}")
-print(session.dirty)
+print(f'object identity: {user._state.identity}')
+print(f"dirty{user._state.dirty}")
+
+# user = session.get(User, 1)
+# print(f"before changes: {user._state.dirty}")
+# user.username = "leul"
+# print(f"after changes: {user._state.dirty}")
+#
+# print(f"dirty list {session.dirty}")
+# session.commit()
+#
+# print(f"after commit {user._state.dirty}")
+# print(f"dirty list {session.dirty}")
+# print(f"original: {user._state.attributes["username"].original}")
+# print(f"Current: {user._state.attributes["username"].current}")
+
+
+# user = session.get(User, 1)
+# print(f"before {user.username}")
+# user.username = "leul"
+#
+# session.commit()
+#
+# print(f"after {user.username}")
+# print(session.dirty)
 
 # user = session.get(User, 1)
 # user.username = "Newname"

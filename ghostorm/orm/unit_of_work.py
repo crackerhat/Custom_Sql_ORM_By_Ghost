@@ -37,9 +37,33 @@ class UnitOfWork:
                 instance._state.commit() # we should have to clear the object state because if we don't do this later when we try to change another attribute it will also include and send the previous values again to the database
                 self.session.dirty.remove(instance)
 
-    def show_operations(self):
-        print(self.collect_new())
-        print(self.collect_dirty())
-        print(self.collect_deleted())
+    def create_insert_operation(self, instance):
+        row = {}
+        for key in instance._state.attributes:
+            row[key] = getattr(instance, key)
 
+        operation = {
+            "table": instance._state.mapper.table_name,
+            "row": row
+        }
+        return operation
+
+    def execute_insert_operation(self):
+        for instance in self.collect_new():
+            operation = self.create_insert_operation(instance)
+
+            success = self.session.engine.insert(operation["table"], operation["row"])
+            if success:
+                instance._state.commit()
+                instance._state.identity = (type(instance), instance.id)
+
+                self.session.identity_map.add(instance)
+                self.session.new.remove(instance)
+
+    def show_operations(self):
+        print("new objects:", self.collect_new())
+        print("dirty objects:", self.collect_dirty())
+        print("deleted objects:",self.collect_deleted())
+
+        self.execute_insert_operation()
         self.execute_updates()

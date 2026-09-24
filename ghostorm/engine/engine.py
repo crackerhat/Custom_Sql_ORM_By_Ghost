@@ -44,3 +44,11 @@ class Engine:
         print("row not found")
         return False
 
+    def insert(self, table_name, row):
+        if table_name not in self.database:
+            self.database[table_name] = []
+        self.database[table_name].append(row.copy()) #Hey guys the use of using .copy() here is that even if we modify the row later it will not modify the row inside  our mock database
+
+        print(f"inserted successfully")
+
+        return True
