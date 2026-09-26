@@ -32,7 +32,7 @@ print("after commit")
 print(session.new)
 
 print(f'object identity: {user._state.identity}')
-print(f"dirty{user._state.dirty}")
+print(f"dirty: {user._state.dirty}")
 
 # user = session.get(User, 1)
 # print(f"before changes: {user._state.dirty}")

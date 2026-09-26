@@ -24,4 +24,10 @@ class InstanceState:
 
         self.dirty = False
 
+    def rollback(self):
+        for key, attribute_state in self.attributes.items():
+            attribute_state.rollback()
+            self.instance.__dict__[key] = attribute_state.current
+
+        self.dirty = False
 

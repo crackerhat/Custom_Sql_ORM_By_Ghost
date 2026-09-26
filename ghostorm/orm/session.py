@@ -17,7 +17,7 @@ class Session:
             instance._state.mapper = mapper
             self.new.append(instance)
             instance._state.session = self
-            self.identity_map.add(instance)
+
     def mark_dirty(self, instance):
         if instance in self.new:
             return
@@ -49,6 +49,11 @@ class Session:
     def commit(self):
         uow = UnitOfWork(self)
         uow.show_operations()
+
+    def rollback(self):
+        for instance in self.dirty.copy():
+            instance._state.rollback()
+        self.dirty.clear()
 
 
 session = Session()

@@ -4,7 +4,6 @@ class AttributeState:
         self.original = _UNSET
         self.current = _UNSET
         self.modified = False
-    # we should have to use _UNSET instead of None to avoid bug
     def set_value(self, value):
         if self.original is _UNSET:
             self.original = value
@@ -16,4 +15,8 @@ class AttributeState:
         
     def commit(self):
         self.original = self.current
+        self.modified = False
+
+    def rollback(self):
+        self.current = self.original
         self.modified = False
