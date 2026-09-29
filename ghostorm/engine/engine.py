@@ -16,6 +16,23 @@ class Engine:
             ]
         }
 
+    def select_where(self,table_name, filters):
+        rows = self.database.get(table_name, [])
+        results = []
+
+        for row in rows:
+            matches = True
+            for column, value in filters.items():
+               if row[column] != value:
+                   matches = False
+                   break
+
+            if matches:
+                results.append(row)
+
+        return results
+
+
     def select_all(self, table_name):
         return self.database.get(table_name, [])
 

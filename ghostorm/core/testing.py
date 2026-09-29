@@ -19,6 +19,11 @@ class Posts(Model):
     id = Column(Integer, primary_key=False)
 
 
+
+# users = session.query(User).all()
+# for user in users:
+#     print(user.id, user.username, user.age)
+
 # user = session.get(User, 2)
 # # print(f"before {user.__dict__}")
 # print(f"\nidentity map: {session.identity_map._objects}")
