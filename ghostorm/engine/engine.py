@@ -16,6 +16,9 @@ class Engine:
             ]
         }
 
+    def select_all(self, table_name):
+        return self.database.get(table_name, [])
+
     def select_by_primary_key(self, table_name, primary_key):
 
         print(f"searching table {table_name} for id={primary_key}")
@@ -52,3 +55,20 @@ class Engine:
         print(f"inserted successfully")
 
         return True
+
+    def delete(self, table_name, primary_key):
+        print(f"deleting from table {table_name}")
+        rows = self.database.get(table_name, [])
+
+        for index, row in enumerate(rows):
+            if row["id"] == primary_key:
+                rows.pop(index)
+                print("deleted successfully")
+                return True
+
+        
+        print("row not found")
+        return False
+
+
+

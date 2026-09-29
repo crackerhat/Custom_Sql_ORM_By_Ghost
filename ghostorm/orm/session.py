@@ -2,6 +2,8 @@ from ghostorm.orm.identity_map import IdentityMap
 from ghostorm.engine.engine import Engine
 from ghostorm.core.registry import registry
 from ghostorm.orm.unit_of_work import UnitOfWork
+from ghostorm.orm.query import Query
+
 
 class Session:
     def __init__(self):
@@ -10,6 +12,10 @@ class Session:
         self.deleted = []
         self.identity_map = IdentityMap()
         self.engine = Engine()
+
+    def query(self, model):
+        return Query(self, model)
+
 
     def add(self, instance):
         if instance not in self.new:
@@ -46,14 +52,33 @@ class Session:
 
         return obj
 
+
+
+    def delete(self, instance):
+        if instance in self.new:
+            self.new.remove(instance)
+            instance._state.session = None
+            return
+        if instance in self.dirty:
+            self.dirty.remove(instance)
+
+        if instance not in self.deleted:
+            self.deleted.append(instance)
+            
     def commit(self):
         uow = UnitOfWork(self)
-        uow.show_operations()
+        uow.execute()
 
     def rollback(self):
         for instance in self.dirty.copy():
             instance._state.rollback()
         self.dirty.clear()
+
+        for instance in self.new:
+            instance._state.session = None
+
+        self.new.clear()
+
 
 
 session = Session()

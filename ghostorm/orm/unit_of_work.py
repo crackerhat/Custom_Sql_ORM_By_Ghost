@@ -29,6 +29,7 @@ class UnitOfWork:
         }
         return operation
 
+
     def execute_updates(self):
         for instance in self.collect_dirty().copy():
             operation = self.create_update_operation(instance)
@@ -59,11 +60,24 @@ class UnitOfWork:
 
                 self.session.identity_map.add(instance)
                 self.session.new.remove(instance)
+    def create_delete_operation(self, instance):
+        operation = {
+            "table": instance._state.mapper.table_name,
+            "primary_key": instance._state.identity[1]
+        }
+        return operation
 
-    def show_operations(self):
-        print("new objects:", self.collect_new())
-        print("dirty objects:", self.collect_dirty())
-        print("deleted objects:",self.collect_deleted())
+    def execute_delete_operation(self):
+        for instance in self.collect_deleted().copy(): # guys the use of .copy() is that when we delete an instance from the list we delete from the original list but the photocopy of the list will never change the index
+            operation = self.create_delete_operation(instance)
+            success = self.session.engine.delete(operation["table"], operation["primary_key"])
+            if success:
+                self.session.identity_map.remove(instance) # guys i removed the instance from the identity map because it might hold the deleted value
+                self.session.deleted.remove(instance)
+                instance._state.session = None
+                instance._state.identity = None
 
+    def execute(self):
         self.execute_insert_operation()
         self.execute_updates()
+        self.execute_delete_operation()

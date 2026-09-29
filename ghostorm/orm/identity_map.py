@@ -12,7 +12,10 @@ class IdentityMap:
         key = (cls, primary_key)
         return self._objects[key]
 
-
+    def remove(self, instance):
+        key = (type(instance), instance.id)
+        if key in self._objects:
+            self._objects.pop(key, None)
 
 
 

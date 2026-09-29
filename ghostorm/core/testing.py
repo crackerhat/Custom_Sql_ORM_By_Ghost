@@ -19,20 +19,47 @@ class Posts(Model):
     id = Column(Integer, primary_key=False)
 
 
-user = User()
-user.id = 4
-user.username = "db-copper"
-user.age = 19
+# user = session.get(User, 2)
+# # print(f"before {user.__dict__}")
+# print(f"\nidentity map: {session.identity_map._objects}")
+# session.delete(user)
+#
+# print(f"deleted objects: {session.deleted}")
+#
+# session.commit()
+#
+# user_again = session.get(User, 2)
+# print(f"again {user_again}")
 
-session.add(user)
-print("before commit")
-print(session.new)
-session.commit()
-print("after commit")
-print(session.new)
+# user = session.get(User, 1)
+#
+# print("Original:", user.username)
+#
+# user.username = "Changed"
+#
+# print("Changed:", user.username)
+# print("Dirty:", session.dirty)
+#
+# session.rollback()
+#
+# print("After rollback:", user.username)
+# print("Dirty:", session.dirty)
+# print("State dirty:", user._state.dirty)
 
-print(f'object identity: {user._state.identity}')
-print(f"dirty: {user._state.dirty}")
+# user = User()
+# user.id = 4
+# user.username = "db-copper"
+# user.age = 19
+#
+# session.add(user)
+# print("before commit")
+# print(session.new)
+# session.commit()
+# print("after commit")
+# print(session.new)
+#
+# print(f'object identity: {user._state.identity}')
+# print(f"dirty: {user._state.dirty}")
 
 # user = session.get(User, 1)
 # print(f"before changes: {user._state.dirty}")
