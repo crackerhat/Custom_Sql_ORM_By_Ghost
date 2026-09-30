@@ -10,7 +10,7 @@ class IdentityMap:
 
     def get(self, cls, primary_key):
         key = (cls, primary_key)
-        return self._objects[key]
+        return self._objects.get(key, None)
 
     def remove(self, instance):
         key = (type(instance), instance.id)

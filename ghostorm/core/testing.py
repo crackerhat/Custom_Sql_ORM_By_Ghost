@@ -18,6 +18,9 @@ class User(Model):
 class Posts(Model):
     id = Column(Integer, primary_key=False)
 
+# users = session.query(User).filter_by(username='Ghost').all()
+# for user in users:
+#     print(user.id, user.username, user.age)
 
 
 # users = session.query(User).all()

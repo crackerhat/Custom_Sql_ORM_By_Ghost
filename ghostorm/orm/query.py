@@ -18,9 +18,13 @@ class Query:
         objects = []
 
         for row in rows:
-            obj = mapper.load(row)
-            self.session.identity_map.add(obj)
-            obj._state.session = self.session
+            primary_key = row["id"]
+            obj = self.session.identity_map.get(self.model, primary_key)
+
+            if obj is None:
+                obj = mapper.load(row)
+                self.session.identity_map.add(obj)
+                obj._state.session = self.session
             objects.append(obj)
 
         return objects
