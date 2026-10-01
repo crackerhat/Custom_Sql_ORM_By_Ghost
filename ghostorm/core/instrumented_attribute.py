@@ -1,3 +1,4 @@
+from ghostorm.orm.expression import BinaryExpression
 
 class InstrumentedAttribute:
     def __init__(self, column):
@@ -17,8 +18,19 @@ class InstrumentedAttribute:
         if attribute_state.modified:
             instance._state.mark_dirty()
 
-
             if instance._state.session:
                 instance._state.session.mark_dirty(instance)
 
 
+    def __gt__(self, value):
+        return BinaryExpression(self, ">", value)
+
+    def __eq__(self, value):
+        return BinaryExpression(self, "=", value)
+
+    def __ne__(self, value):
+        return BinaryExpression(self, "!=", value)
+    def __ge__(self, value):
+        return BinaryExpression(self, ">=", value)
+    def __le__(self, value):
+        return BinaryExpression(self, "<=", value)

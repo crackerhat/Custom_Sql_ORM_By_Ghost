@@ -18,6 +18,13 @@ class User(Model):
 class Posts(Model):
     id = Column(Integer, primary_key=False)
 
+user1 = session.get(User, 1)
+user2 = session.query(User).filter_by(id=1).all()
+#user3 = session.query(User).filter_by(User.age > 20).all()
+
+print(user1 is user2[0])
+for user in user2:
+    print(user.id)
 # users = session.query(User).filter_by(username='Ghost').all()
 # for user in users:
 #     print(user.id, user.username, user.age)

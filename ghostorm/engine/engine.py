@@ -38,13 +38,11 @@ class Engine:
 
     def select_by_primary_key(self, table_name, primary_key):
 
-        print(f"searching table {table_name} for id={primary_key}")
 
         rows = self.database.get(table_name, [])
 
         for row in rows:
             if row["id"] == primary_key:
-                print(" Row Found! ")
                 return row
         print("row not found")
 

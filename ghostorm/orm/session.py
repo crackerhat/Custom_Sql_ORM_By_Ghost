@@ -31,11 +31,9 @@ class Session:
             self.dirty.append(instance)
 
     def get(self, cls, primary_key):
-        try:
-            obj = self.identity_map.get(cls, primary_key) # remember the use of this identity map
+        obj = self.identity_map.get(cls, primary_key)
+        if obj is not None:
             return obj
-        except KeyError:
-            print("object is not in Identity Map")
 
         mapper = registry.get_mapper(cls.__name__)
 
