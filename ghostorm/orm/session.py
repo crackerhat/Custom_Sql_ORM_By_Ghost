@@ -1,5 +1,5 @@
 from ghostorm.orm.identity_map import IdentityMap
-from ghostorm.engine.engine import Engine
+from ghostorm.engine.modEngine import Engine
 from ghostorm.core.registry import registry
 from ghostorm.orm.unit_of_work import UnitOfWork
 from ghostorm.orm.query import Query

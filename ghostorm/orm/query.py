@@ -1,12 +1,12 @@
 from ghostorm.core.registry import registry
-from ghostorm.engine.engine import Engine
+from ghostorm.engine.modEngine import Engine
 
 
 class Query:
     def __init__(self, session, model):
         self.session = session
         self.model = model
-        self.filters = {}
+        self.filters = []
 
     def all(self):
         mapper = registry.get_mapper(self.model.__name__)
@@ -25,12 +25,17 @@ class Query:
                 obj = mapper.load(row)
                 self.session.identity_map.add(obj)
                 obj._state.session = self.session
+
             objects.append(obj)
 
         return objects
 
-    def filter_by(self, **kwargs):
-        self.filters.update(kwargs)
+    # def filter_by(self, **kwargs):
+    #     self.filters.update(kwargs)
+    #     return self
+
+    def filter_by(self, *expressions):
+        self.filters.extend(expressions)
         return self
 
 

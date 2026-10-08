@@ -9,7 +9,7 @@ from ghostorm.core.relationship import  RelationshipProperty
 from ghostorm.core.mapper import Mapper
 from ghostorm.orm.session import session
 from ghostorm.orm.identity_map import IdentityMap
-from ghostorm.engine.engine import Engine
+from ghostorm.engine.modEngine import Engine
 
 class User(Model):
     id = Column(Integer, primary_key=True)
@@ -18,16 +18,23 @@ class User(Model):
 class Posts(Model):
     id = Column(Integer, primary_key=False)
 
-user1 = session.get(User, 1)
-user2 = session.query(User).filter_by(id=1).all()
-#user3 = session.query(User).filter_by(User.age > 20).all()
 
-print(user1 is user2[0])
-for user in user2:
-    print(user.id)
-# users = session.query(User).filter_by(username='Ghost').all()
-# for user in users:
-#     print(user.id, user.username, user.age)
+# condition = User.age > 20
+# print(type(condition))
+# print(condition.column)
+# print(condition.value)
+# print(condition.operator)
+
+# user1 = session.get(User, 1)
+# user2 = session.query(User).filter_by(id=1).all()
+user3 = session.query(User).filter_by(User.age > 20).all()
+print(user3)
+# print(user1 is user2[0])
+# for user in user2:
+#     print(user.id)
+# # users = session.query(User).filter_by(username='Ghost').all()
+# # for user in users:
+# #     print(user.id, user.username, user.age)
 
 
 # users = session.query(User).all()
