@@ -9,7 +9,9 @@ from ghostorm.core.relationship import  RelationshipProperty
 from ghostorm.core.mapper import Mapper
 from ghostorm.orm.session import session
 from ghostorm.orm.identity_map import IdentityMap
-from ghostorm.engine.modEngine import Engine
+from ghostorm.engine.engine import Engine
+
+
 
 class User(Model):
     id = Column(Integer, primary_key=True)
@@ -19,6 +21,16 @@ class Posts(Model):
     id = Column(Integer, primary_key=False)
 
 
+engine = Engine("testing.db")
+
+metadata.create_all(engine)
+
+cursor = engine.execute("PRAGMA table_info(user)")
+for column in cursor.fetchall():
+    print(column)
+    
+engine.connection.close()
+
 # condition = User.age > 20
 # print(type(condition))
 # print(condition.column)
@@ -27,8 +39,8 @@ class Posts(Model):
 
 # user1 = session.get(User, 1)
 # user2 = session.query(User).filter_by(id=1).all()
-user3 = session.query(User).filter_by(User.age > 20).all()
-print(user3)
+# user3 = session.query(User).filter_by(User.age > 20).all()
+# print(user3)
 # print(user1 is user2[0])
 # for user in user2:
 #     print(user.id)

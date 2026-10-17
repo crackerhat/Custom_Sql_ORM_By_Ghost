@@ -24,3 +24,6 @@ class Compiler:
                 parameters.append(condition_parameters)
 
             sql += "WHERE " + " AND ".join(conditions)
+
+        return sql, parameters
+

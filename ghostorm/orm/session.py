@@ -5,6 +5,7 @@ from ghostorm.orm.unit_of_work import UnitOfWork
 from ghostorm.orm.query import Query
 
 
+
 class Session:
     def __init__(self):
         self.new = []
