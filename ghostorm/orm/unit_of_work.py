@@ -18,6 +18,7 @@ class UnitOfWork:
             if attribute_state.modified:
                 changes[key] = attribute_state.current
 
+
         return changes
 
     def create_update_operation(self, instance):
@@ -53,13 +54,17 @@ class UnitOfWork:
         for instance in self.collect_new():
             operation = self.create_insert_operation(instance)
 
-            success = self.session.engine.insert(operation["table"], operation["row"])
-            if success:
+            generated_id = self.session.engine.insert(operation["table"], operation["row"])
+            if generated_id is not None:
+                primary_key_name = instance._state.mapper.primary_keys[0].name
+                setattr(instance, primary_key_name, generated_id)
                 instance._state.commit()
                 instance._state.identity = (type(instance), instance.id)
 
                 self.session.identity_map.add(instance)
                 self.session.new.remove(instance)
+
+
     def create_delete_operation(self, instance):
         operation = {
             "table": instance._state.mapper.table_name,

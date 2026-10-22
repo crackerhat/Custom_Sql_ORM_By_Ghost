@@ -12,20 +12,26 @@ class Engine:
 
     def insert(self, table_name, row):
         columns = list(row.keys())
-        column_names = ", ".join(columns)
-        question_marks = []
 
-        for _ in columns:
-            question_marks.append("?") # guys we have to use quetion marks okay and the reason is to defend hackers from sql injection attack on our website database
+        if columns:
+            column_names = ", ".join(columns)
+            question_marks = []
 
-        placeholders = ", ".join(question_marks)
+            for _ in columns:
+                question_marks.append("?") # guys we have to use quetion marks okay and the reason is to defend hackers from sql injection attack on our website database this is called parametrized query
 
-        sql = (f"INSERT INTO {table_name} ({column_names}) VALUES ({placeholders})")
+            placeholders = ", ".join(question_marks)
 
-        values = [row[column] for column in columns]
+            sql = (f"INSERT INTO {table_name} ({column_names}) VALUES ({placeholders})")
 
-        self.execute(sql, values)
+            values = [row[column] for column in columns]
+        else:
+            sql = f"INSERT INTO {table_name} DEFAULT VALUES" # this line is because the database have to automaticallly assign an id value if we don't give the users an id and also the row of the instance is empty this will be triggered 
+            values = []
+
+        cursor = self.execute(sql, values)
         self.connection.commit()
+        return cursor.lastrowid
 
     def update(self, table_name, primary_key, changes):
         if not changes:
@@ -45,6 +51,17 @@ class Engine:
             return True
         else:
             return False
+
+    def delete(self, table_name, primary_key):
+        sql = f"DELETE FROM {table_name} WHERE id = ?"
+        cursor = self.execute(sql, [primary_key])
+
+        self.connection.commit()
+        if cursor.rowcount > 0:
+            return True
+        else:
+            return False
+
 
 
 

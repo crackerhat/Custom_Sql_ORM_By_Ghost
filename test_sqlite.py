@@ -19,15 +19,57 @@ from ghostorm.core.table import Table
 from ghostorm.types import Integer, String
 from ghostorm.engine.dialect import SQLiteDialect
 
-table = Table("user")
-table.add_column("id", Column(Integer, primary_key=True))
+# table = Table("user")
+# table.add_column("id", Column(Integer, primary_key=True))
+#
+# table.add_column("username", Column(String))
+#
+# table.add_column("age", Column(Integer))
+#
+# dialect = SQLiteDialect()
+#
+# sql = dialect.compile_create_table(table)
+#
+# print(sql)
 
-table.add_column("username", Column(String))
 
-table.add_column("age", Column(Integer))
 
-dialect = SQLiteDialect()
+from ghostorm.engine.engine import Engine
 
-sql = dialect.compile_create_table(table)
 
-print(sql)
+engine = Engine("ghostorm.db")
+
+# Make sure the table exists first.
+engine.execute("""
+    CREATE TABLE IF NOT EXISTS user (
+        id INTEGER PRIMARY KEY,
+        username TEXT NOT NULL,
+        age INTEGER
+    )
+""")
+engine.connection.commit()
+
+# INSERT
+engine.insert("user", {
+    "id": 100,
+    "username": "GhostORM",
+    "age": 19
+})
+
+# UPDATE
+engine.update("user", 100, {
+    "age": 20
+})
+
+# DELETE
+engine.delete("user", 100)
+
+# Verify the row was deleted.
+cursor = engine.execute(
+    "SELECT * FROM user WHERE id = ?",
+    [100]
+)
+
+print("Remaining row:", cursor.fetchone())
+
+engine.connection.close()

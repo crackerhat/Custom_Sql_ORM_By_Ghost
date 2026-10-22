@@ -7,12 +7,12 @@ from ghostorm.orm.query import Query
 
 
 class Session:
-    def __init__(self):
+    def __init__(self, engine):
         self.new = []
         self.dirty = []
         self.deleted = []
         self.identity_map = IdentityMap()
-        self.engine = Engine()
+        self.engine = engine
 
     def query(self, model):
         return Query(self, model)
@@ -37,6 +37,9 @@ class Session:
             return obj
 
         mapper = registry.get_mapper(cls.__name__)
+
+        if mapper is None:
+            raise ValueError(f" no mapper registered for {cls.__name__}")
 
         row = self.engine.select_by_primary_key(mapper.table_name, primary_key)
 
@@ -80,6 +83,6 @@ class Session:
 
 
 
-session = Session()
+# session = Session()
 
 

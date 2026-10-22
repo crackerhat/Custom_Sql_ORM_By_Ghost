@@ -16,14 +16,14 @@ class Compiler:
 
         if expressions:
             conditions = []
-
+            #age > 20 , username = ghost
             for expression in expressions:
                 condition_sql, condition_parameters = self.compile_expression(expression)
 
                 conditions.append(condition_sql)
-                parameters.append(condition_parameters)
+                parameters.extend(condition_parameters)
 
-            sql += "WHERE " + " AND ".join(conditions)
+            sql += " WHERE " + " AND ".join(conditions)
 
         return sql, parameters
 

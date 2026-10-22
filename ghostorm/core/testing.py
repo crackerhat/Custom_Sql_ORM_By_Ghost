@@ -7,7 +7,7 @@ from ghostorm.core.model import Model
 from ghostorm.core.registry import registry
 from ghostorm.core.relationship import  RelationshipProperty
 from ghostorm.core.mapper import Mapper
-from ghostorm.orm.session import session
+from ghostorm.orm.session import Session
 from ghostorm.orm.identity_map import IdentityMap
 from ghostorm.engine.engine import Engine
 
@@ -18,18 +18,43 @@ class User(Model):
     username = Column(String, nullable=False)
     age = Column(Integer, nullable=False)
 class Posts(Model):
-    id = Column(Integer, primary_key=False)
+    id = Column(Integer, primary_key=True)
 
-
-engine = Engine("testing.db")
-
+engine = Engine("ghostorm_session_test.db")
 metadata.create_all(engine)
 
-cursor = engine.execute("PRAGMA table_info(user)")
-for column in cursor.fetchall():
-    print(column)
-    
-engine.connection.close()
+session = Session(engine)
+
+user = User()
+user.username = "Ghostorm"
+user.age = 22
+print(f"before add: {user.id}")
+session.add(user)
+session.commit()
+
+users = session.query(User).filter(User.age > 20).all()
+for user in users:
+    print(user.id, user.age, user.username)
+
+
+# user = User()
+# user.username = "Ghostorm"
+# user.age = 22
+# print(f"before add: {user.id}")
+# session.add(user)
+# session.commit()
+# print(f"after add or generated id : {user.id}")
+#
+
+# engine = Engine("testing.db")
+#
+# metadata.create_all(engine)
+#
+# cursor = engine.execute("PRAGMA table_info(user)")
+# for column in cursor.fetchall():
+#     print(column)
+#
+# engine.connection.close()
 
 # condition = User.age > 20
 # print(type(condition))
