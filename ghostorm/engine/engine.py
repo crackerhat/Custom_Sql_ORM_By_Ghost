@@ -30,7 +30,7 @@ class Engine:
             values = []
 
         cursor = self.execute(sql, values)
-        self.connection.commit()
+
         return cursor.lastrowid
 
     def update(self, table_name, primary_key, changes):
@@ -45,7 +45,7 @@ class Engine:
         values.append(primary_key)
 
         cursor = self.execute(sql, values)
-        self.connection.commit()
+
 
         if cursor.rowcount > 0: # HEY GUYS THIS LINE HERE I ADDED IS  BECAUSE WE HAVE TO KNOW THAT ROW EXISTS AND ALSO WE HAVE TO KNOW IT IS UPDATED
             return True
@@ -56,7 +56,7 @@ class Engine:
         sql = f"DELETE FROM {table_name} WHERE id = ?"
         cursor = self.execute(sql, [primary_key])
 
-        self.connection.commit()
+
         if cursor.rowcount > 0:
             return True
         else:

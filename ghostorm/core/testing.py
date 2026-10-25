@@ -25,17 +25,28 @@ metadata.create_all(engine)
 
 session = Session(engine)
 
-user = User()
-user.username = "Ghostorm"
-user.age = 22
-print(f"before add: {user.id}")
-session.add(user)
+user = session.get(User, 1)
+user.age = 50
 session.commit()
+print(session.dirty)
+print(user.age)
 
-users = session.query(User).filter(User.age > 20).all()
-for user in users:
-    print(user.id, user.age, user.username)
-
+# user = User()
+# user.username = "Ghostorm"
+# user.age = 22
+# print(f"before add: {user.id}")
+# session.add(user)
+# session.commit()
+#
+# # users = session.query(User).filter(User.age > 20).all()
+# # for user in users:
+# #     print(user.id, user.age, user.username)
+#
+# user_leul = session.get(User, 2)
+# print(user_leul)
+# print(user_leul.id)
+# print(user_leul.username)
+# print(user_leul.age)
 
 # user = User()
 # user.username = "Ghostorm"
