@@ -1,5 +1,6 @@
 from ghostorm.core.instrumented_attribute import InstrumentedAttribute
 from ghostorm.core.column import Column
+from ghostorm.core.relationship import RelationshipProperty
 from ghostorm.core.table import Table
 
 
@@ -22,6 +23,8 @@ class Mapper:
                     self.primary_keys.append(obj)
                 descriptor = InstrumentedAttribute(obj)
                 setattr(self.class_, name, descriptor)
+            elif isinstance(obj, RelationshipProperty):
+                self.relationships[name] = obj
 
     def load(self, row):
         obj = self.class_()

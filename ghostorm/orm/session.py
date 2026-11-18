@@ -76,15 +76,18 @@ class Session:
             self.deleted.append(instance)
 
     def rollback(self):
+        self.engine.connection.rollback()
+
         for instance in self.dirty.copy():
             instance._state.rollback()
-        self.dirty.clear()
+            self.dirty.remove(instance)
 
-        for instance in self.new:
+        for instance in self.new.copy():
             instance._state.session = None
+            instance._state.identity = None
+            self.new.remove(instance)
 
-        self.new.clear()
-
+        self.deleted.clear()
     def create_snapshot(self): # guys we use this function to restore the orm state if some error happened during execution
             instances = (self.new + self.dirty + self.deleted)
             instances = list(dict.fromkeys(instances))
@@ -132,8 +135,8 @@ class Session:
                 if key != "_state":
                    del instance.__dict__[key]
 
-            instance.__dict__.update(instance_values)
-            instance._state.attribtes.clear()
+            instance.__dict__.update(instance_values) # hey programmers we should have to do this because we have to update the values with the previous values to roll back more cleanly
+            instance._state.attributes.clear()
 
             for key, values in saved_values["attributes"].items():
                 attribute_state = instance._state.get_attribute_state(key)
@@ -145,13 +148,15 @@ class Session:
             instance._state.identity = saved_values["identity"]
 
     def commit(self):
+        snapshot = self.create_snapshot()
         uow = UnitOfWork(self)
         try:
             uow.execute()
 
             self.engine.connection.commit()
         except Exception:
-            self.engine.connection.rollback()  # the reason i do it this way is all works should have to be commited together not independently
+            self.engine.connection.rollback()   # the reason i do it this way is all works should have to be commited together not independently
+            self._restore_snapshot(snapshot)
             self.rollback()
 
             raise

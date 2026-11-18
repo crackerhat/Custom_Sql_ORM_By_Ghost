@@ -20,16 +20,53 @@ class User(Model):
 class Posts(Model):
     id = Column(Integer, primary_key=True)
 
-engine = Engine("ghostorm_session_test.db")
-metadata.create_all(engine)
 
+engine = Engine("ghostorm_session_test.db")
 session = Session(engine)
 
-user = session.get(User, 1)
-user.age = 50
-session.commit()
-print(session.dirty)
-print(user.age)
+user = session.get(User, 2)
+original_age = user.age
+
+print(f"original_age{original_age}")
+
+user.age = 77
+
+print(f"changed_age{user.age}")
+
+print(len(session.dirty))
+
+
+real_update = engine.update
+
+def update_then_fail(table_name, primary_key, changes):
+    real_update(table_name, primary_key, changes)
+
+    raise RuntimeError("guys this is just for testing the roll back okay!!!")
+
+engine.update = update_then_fail
+
+try:
+    session.commit()
+except RuntimeError as error:
+    print(f"caught error {error}")
+finally:
+    engine.update = real_update
+
+print(f"python age after rollback: {user.age}")
+print(f"original age after rollback: {user._state.attributes["age"].original}")
+print(f"modified after rollback: {user._state.attributes["age"].modified}")
+
+
+# engine = Engine("ghostorm_session_test.db")
+# metadata.create_all(engine)
+#
+# session = Session(engine)
+#
+# user = session.get(User, 1)
+# user.age = 50
+# session.commit()
+# print(session.dirty)
+# print(user.age)
 
 # user = User()
 # user.username = "Ghostorm"
